@@ -20,7 +20,7 @@ This is a URL Shortener Microservice built with Node.js and Express. It provides
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/your-repository.git
+    git clone https://github.com/amittannagit/FCC-URL-Shortener-Microservice.git
     ```
 
 2. Navigate to the project directory:
