@@ -1,12 +1,75 @@
 # URL Shortener Microservice
 
-This is a URL Shortener Microservice built with Node.js and Express. It provides a way to shorten long URLs and redirect them to their original destinations. This project is a part of the freeCodeCamp backend development curriculum.
+This is a URL Shortener Microservice project built as part of the [freeCodeCamp Back End Development and APIs Certification](https://www.freecodecamp.org/learn/back-end-development-and-apis/back-end-development-and-apis-projects/url-shortener-microservice).
 
-## Features
+## Project Overview
 
-- Shorten URLs by posting them to the `/api/shorturl` endpoint.
-- Redirect shortened URLs to their original destinations.
-- Handle invalid URLs with appropriate error messages.
+The URL Shortener Microservice provides an API to shorten URLs and redirect shortened URLs to their original form. It handles URL validation and error messages for invalid URLs.
+
+### Features
+
+- **Shorten URLs**: Accepts a URL and returns a shortened URL identifier.
+- **Redirect**: Redirects requests to the original URL based on the shortened URL identifier.
+- **Error Handling**: Handles invalid URLs and unknown short URLs with appropriate error messages.
+
+## API Endpoints
+
+### POST `/api/shorturl`
+
+- **Request Body**:
+  ```json
+  {
+    "url": "http://example.com"
+  }
+  ```
+
+- **Example Request**:
+  ```bash
+  curl -X POST -H "Content-Type: application/json" -d '{"url":"http://example.com"}' http://localhost:3000/api/shorturl
+  ```
+
+- **Example Response**:
+  ```json
+  {
+    "original_url": "http://example.com",
+    "short_url": 1
+  }
+  ```
+
+- **Error Handling**:
+  - **Invalid URL**:
+    - **Request**:
+      ```bash
+      curl -X POST -H "Content-Type: application/json" -d '{"url":"invalid-url"}' http://localhost:3000/api/shorturl
+      ```
+    - **Response**:
+      ```json
+      {
+        "error": "invalid url"
+      }
+      ```
+
+### GET `/api/shorturl/:short_url`
+
+- **Parameters**:
+  - `short_url`: The shortened URL identifier.
+
+- **Example Request**:
+  ```bash
+  curl http://localhost:3000/api/shorturl/1
+  ```
+
+- **Example Response**:
+  - **Redirects** to the original URL if found.
+
+- **Error Handling**:
+  - **Short URL Not Found**:
+    - **Response**:
+      ```json
+      {
+        "error": "No corresponding URL found"
+      }
+      ```
 
 ## Getting Started
 
@@ -26,7 +89,7 @@ This is a URL Shortener Microservice built with Node.js and Express. It provides
 2. Navigate to the project directory:
 
     ```bash
-    cd your-repository
+    cd FCC-URL-Shortener-Microservice
     ```
 
 3. Install dependencies:
@@ -43,55 +106,65 @@ This is a URL Shortener Microservice built with Node.js and Express. It provides
 
     The server will start and listen on port 3000 or the port specified in the environment variable `PORT`.
 
-### Usage
+## Testing
 
-1. **Shorten a URL**:
+To test the endpoints, you can use tools like [Postman](https://www.postman.com/) or `curl`.
 
-    - **Endpoint**: `POST /api/shorturl`
-    - **Request Body**: JSON object with a `url` field.
-    - **Example Request**:
-      ```json
-      {
-        "url": "https://www.example.com"
-      }
+### Test Cases
+
+1. **Shorten URL**:
+    - **Request**:
+      ```bash
+      curl -X POST -H "Content-Type: application/json" -d '{"url":"http://example.com"}' http://localhost:3000/api/shorturl
       ```
-    - **Response**: JSON object containing `original_url` and `short_url`.
-    - **Example Response**:
+    - **Expected Response**:
       ```json
       {
-        "original_url": "https://www.example.com",
+        "original_url": "http://example.com",
         "short_url": 1
       }
       ```
 
 2. **Redirect to Original URL**:
+    - **Request**:
+      ```bash
+      curl http://localhost:3000/api/shorturl/1
+      ```
+    - **Expected Behavior**:
+      Redirects to `http://example.com`.
 
-    - **Endpoint**: `GET /api/shorturl/:shortUrl`
-    - **Path Parameter**: `shortUrl` (numeric short URL identifier)
-    - **Example**: `GET /api/shorturl/1`
-    - **Redirects** to the original URL stored for that short URL.
+3. **Invalid URL**:
+    - **Request**:
+      ```bash
+      curl -X POST -H "Content-Type: application/json" -d '{"url":"invalid-url"}' http://localhost:3000/api/shorturl
+      ```
+    - **Expected Response**:
+      ```json
+      {
+        "error": "invalid url"
+      }
+      ```
 
-### Error Handling
+4. **Short URL Not Found**:
+    - **Request**:
+      ```bash
+      curl http://localhost:3000/api/shorturl/999
+      ```
+    - **Expected Response**:
+      ```json
+      {
+        "error": "No corresponding URL found"
+      }
+      ```
 
-- **No URL Provided**:
-  - **Response**: `{ "error": "No URL provided" }`
-- **Invalid URL Format**:
-  - **Response**: `{ "error": "invalid url" }`
-- **No Corresponding URL Found**:
-  - **Response**: `{ "error": "No corresponding URL found" }`
+## Deployment
 
-### Running Tests
+For deploying the application, you can use services like [Heroku](https://www.heroku.com/), [Vercel](https://vercel.com/), or any cloud provider that supports Node.js applications. Ensure to set the `PORT` environment variable if deploying.
 
-To run tests, you need to use a testing framework. For manual testing, you can use tools like Postman or `curl` to interact with the endpoints.
-
-### Deployment
-
-For deploying the application, you can use services like Heroku, Vercel, or any cloud provider that supports Node.js applications. Make sure to set the `PORT` environment variable if deploying.
-
-### Contributing
+## Contributing
 
 Feel free to open issues or submit pull requests to contribute to the project. Follow the standard GitHub workflow for contributing.
 
-### License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
